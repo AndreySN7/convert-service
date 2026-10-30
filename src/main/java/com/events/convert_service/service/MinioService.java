@@ -19,18 +19,16 @@ import java.nio.file.Path;
 public class MinioService {
 	private final MinioClient minioClient;
 
-	private static final String BUCKET_NAME = "test";
-
-	public void upload(Path file, String key) throws MinioException, IOException {
-		boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build());
+	public void upload(Path file, String key, String bucketName) throws MinioException, IOException {
+		boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
 		if (!exists) {
-			minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
+			minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
 		}
 
 		try (InputStream inputStream = Files.newInputStream(file)) {
 			minioClient.putObject(
 						PutObjectArgs.builder()
-									.bucket(BUCKET_NAME)
+									.bucket(bucketName)
 									.object(key)
 									.stream(inputStream, Files.size(file), -1L)
 									.contentType("application/pdf")
@@ -38,10 +36,10 @@ public class MinioService {
 		}
 	}
 
-	public InputStream download(String key) throws MinioException {
+	public InputStream download(String key, String bucketName) throws MinioException {
 		return minioClient.getObject(
 					GetObjectArgs.builder()
-								.bucket(BUCKET_NAME)
+								.bucket(bucketName)
 								.object(key)
 								.build());
 	}
