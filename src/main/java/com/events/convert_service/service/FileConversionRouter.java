@@ -28,8 +28,8 @@ public class FileConversionRouter {
 
 		String bucketName = "test";
 //		String key = "photo.jpg";
-//		String key = "photo.png";
-		String key = "photo.txt";
+		String key = "photo.png";
+//		String key = "photo.txt";
 //		String key = "images.zip";
 
 
