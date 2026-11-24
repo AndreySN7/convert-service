@@ -10,5 +10,39 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin
     volumes:
       - minio_data:/data
+
+  postgres:
+    image: postgres:18
+    container_name: convert-service
+    restart: always
+    environment:
+      POSTGRES_DB: convert-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+  kafka:
+    image: apache/kafka:4.4.0
+    container_name: kafka-convert-service
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_KRAFT_MODE: "true"
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENERS: PLAINTEXT://localhost:9092,CONTROLLER://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-convert-service:9093"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      CLUSTER_ID: "Mk3OEYBSD34fcwNTJENDM2Qk"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+
 volumes:
   minio_data:
+  postgres_data:
+  kafka_data:

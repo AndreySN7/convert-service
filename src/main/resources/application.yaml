@@ -1,6 +1,43 @@
 spring:
   application:
     name: convert-service
+  config:
+    import: optional:db-credentials.yml
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/convert-service
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      acks: all                 # ждать подтверждения от всех ISR
+      retries: 10
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        enable.idempotence: true  # идемпотентный продюсер: без дублей при ретраях
+    consumer:
+      enable-auto-commit: false   # коммит offset вручную, после обработки
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+kafka:
+  topics:
+    topic-converted: converted
+    topic-for-conversion: for-conversion
 
 minio:
   endpoint: ${MINIO_ENDPOINT:http://localhost:9000}

@@ -19,13 +19,13 @@ repositories {
 }
 
 dependencies {
-//	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-kafka")
 	implementation("io.minio:minio:9.0.3")
 	implementation("org.apache.pdfbox:pdfbox:3.0.8")
 	implementation("com.itextpdf:itextpdf:5.5.13.6")
-//	implementation("org.springframework.boot:spring-boot-starter-liquibase")
+	implementation("org.springframework.boot:spring-boot-starter-liquibase")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
