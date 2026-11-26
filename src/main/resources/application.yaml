@@ -47,3 +47,5 @@ minio:
 app:
   dir-input: ${DOWNLOAD_DIR:src/main/resources/temp/in}
   dir-output: ${UPLOAD_DIR:src/main/resources/temp/out}
+  delay-outbox-publish: ${DELAY_OUTBOX_PUBLISH:60000}  # 60 секунд
+  batch-size-publish: ${BATCH_SIZE_PUBLISH:10}

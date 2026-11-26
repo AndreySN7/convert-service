@@ -1,6 +1,7 @@
 package com.events.convert_service.repository;
 
 import com.events.convert_service.entity.ConvertFileOutbox;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,12 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ConvertFileOutboxRepository extends JpaRepository<ConvertFileOutbox, UUID> {
-	@Query(value = """
-				select * from convert_file_outbox t
-				 where t.published_at is null
-				 order by t.created_at asc
-				 limit :limit""",  nativeQuery = true)
-	List<ConvertFileOutbox> findByPublishedAtIsNull(@Param(value = "limit") int limit);
+	List<ConvertFileOutbox> findByPublishedAtIsNullOrderByCreatedAtAsc(Pageable pageable);
 
 	@Modifying(clearAutomatically = true)
 	@Query(value = """
@@ -25,5 +21,5 @@ public interface ConvertFileOutboxRepository extends JpaRepository<ConvertFileOu
 				 where t.eventId in :eventIds
 				""")
 	void updatePublishedAt(@Param(value = "eventIds") List<UUID> eventIds,
-	                   @Param(value = "publishedAt") LocalDateTime publishedAt);
+	                       @Param(value = "publishedAt") LocalDateTime publishedAt);
 }
